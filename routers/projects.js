@@ -1,6 +1,7 @@
 const express = require("express");
 
 const projects = require("../data/helpers/projectModel.js")
+const { validateProjectID } = require("../middleware/validateProjectID")
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get("/", (req, res) => {
         })
 })
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateProjectID(), (req, res) => {
     projects.get(req.params.id)
         .then(data => {
             res.json(data)
@@ -34,7 +35,7 @@ router.post("/", (req, res) => {
         })
 })
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validateProjectID(), (req, res) => {
     projects.update(req.params.id, req.body)
         .then(updatedProject => {
             res.json(updatedProject)
@@ -44,7 +45,7 @@ router.put("/:id", (req, res) => {
         })
 })
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateProjectID(), (req, res) => {
     projects.remove(req.params.id)
         .then(data => {
             res.json(data)
@@ -54,10 +55,10 @@ router.delete("/:id", (req, res) => {
         })
 })
 
-router.get("/:id/actions", (req, res) => {
+router.get("/:id/actions", validateProjectID(), (req, res) => {
     projects.getProjectActions(req.params.id)
-        .then(oneProject => {
-            res.json(oneProject.actions)
+        .then(projectActions => {
+            res.json(projectActions)
         })
         .catch(error => {
             res.status(500).json(error)
