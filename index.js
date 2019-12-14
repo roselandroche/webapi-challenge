@@ -7,6 +7,7 @@ const actionsRouter = require("./routers/actions")
 const server = express()
 
 server.use(express.json())
+server.use(morgan())
 server.use("/projects", projectsRouter)
 server.use("/actions", actionsRouter)
 
